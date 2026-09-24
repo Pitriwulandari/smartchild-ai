@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartChild AI — Skrining Autisme Dini</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+<!-- ===================== LAUNCH SCREEN ===================== -->
+<div id="launchScreen" class="launch-screen" aria-label="Memuat SmartChild AI">
+  <div class="launch-orbit launch-orbit-one"></div>
+  <div class="launch-orbit launch-orbit-two"></div>
+  <div class="launch-card">
+    <div class="launch-logo"><i data-lucide="brain-circuit"></i></div>
+    <h1>SmartChild AI</h1>
+    <p>Deteksi dini tumbuh kembang si kecil</p>
+    <div class="launch-loader" aria-hidden="true"><span></span></div>
+    <small>Menyiapkan aplikasi</small>
+  </div>
+</div>
+
+<!-- ===================== LOGIN SCREEN ===================== -->
+<div id="loginScreen" class="login-screen">
+  <div class="login-card">
+    <!-- Logo -->
+    <div class="login-brand">
+      <div class="login-logo">AI</div>
+      <div>
+        <div class="login-title">SmartChild AI</div>
+        <div class="login-subtitle">Skrining Autisme Dini · Posyandu Digital</div>
+      </div>
+    </div>
+
+    <!-- Tab role -->
+    <div class="login-tabs">
+      <button class="login-tab active" data-role="kader">Kader Posyandu</button>
+      <button class="login-tab" data-role="ortu">Orang Tua</button>
+      <button class="login-tab" data-role="admin">Admin</button>
+    </div>
+
+    <div class="login-role-desc" id="loginRoleDesc">
+      Masuk sebagai Kader Posyandu untuk mengakses semua fitur skrining.
+    </div>
+
+    <!-- Form -->
+    <form id="loginForm" autocomplete="off">
+      <div class="login-field">
+        <label>Username / Email</label>
+        <input type="text" id="loginUser" placeholder="Contoh: kader.melati" autocomplete="username">
+      </div>
+      <div class="login-field">
+        <label>Password</label>
+        <div class="login-pass-wrap">
+          <input type="password" id="loginPass" placeholder="Masukkan password" autocomplete="current-password">
+          <button type="button" class="login-eye" id="loginEye">Lihat</button>
+        </div>
+      </div>
+      <div class="login-error" id="loginError">Username atau password salah.</div>
+      <button type="submit" class="login-btn" id="loginSubmit">
+        <span id="loginBtnText">Masuk</span>
+        <span id="loginBtnLoad" style="display:none">Memverifikasi...</span>
+      </button>
+    </form>
+
+    <!-- Demo hint -->
+    <div class="login-demo">
+      <span>Demo kredensial:</span>
+      <code id="demoHint">kader / posyandu123</code>
+    </div>
+
+    <div class="login-footer">
+      SmartChild AI  · Sistem Skrining Autisme Dini Indonesia
+    </div>
+  </div>
+</div>
+
+<!-- ===================== SIDEBAR ===================== -->
+<aside id="sidebar" class="sidebar">
+  <div class="brand-wrap">
+    <div class="brand-logo">AI</div>
+    <div>
+      <div class="brand-name">SmartChild AI</div>
+      <div class="brand-sub">Posyandu Digital</div>
+    </div>
+  </div>
+  <nav class="sidebar-nav" id="sidebarNav">
+    <div class="nav-section-label">Menu Utama</div>
+
+    <!-- Semua role -->
+    <button class="nav-item active" data-view="dashboard" data-roles="admin,kader,ortu"><span class="nav-icon"></span><span>Dashboard</span></button>
+
+    <!-- Kader & Orang Tua -->
+    <button class="nav-item" data-view="screening" data-roles="kader,ortu"><span class="nav-icon"></span><span>Mulai Skrining</span></button>
+
+    <!-- Kader & Admin -->
+    <button class="nav-item" data-view="analytics" data-roles="kader,admin"><span class="nav-icon"></span><span>Analitik & Tren</span></button>
+
+    <!-- Admin only -->
+    <div class="nav-section-label nav-role-label" data-roles="admin" style="margin-top:16px">Manajemen</div>
+    <button class="nav-item" data-view="admin-users" data-roles="admin"><span class="nav-icon"></span><span>Manajemen Pengguna</span></button>
+    <button class="nav-item" data-view="admin-faskes" data-roles="admin"><span class="nav-icon"></span><span>Data Faskes</span></button>
+    <button class="nav-item" data-view="admin-settings" data-roles="admin"><span class="nav-icon"></span><span>Pengaturan Sistem</span></button>
+
+    <!-- Orang Tua only -->
+    <div class="nav-section-label nav-role-label" data-roles="ortu" style="margin-top:16px">Tumbuh Kembang</div>
+    <button class="nav-item" data-view="education" data-roles="ortu"><span class="nav-icon"></span><span>Edukasi Orang Tua</span></button>
+    <button class="nav-item" data-view="progress" data-roles="ortu"><span class="nav-icon"></span><span>Progres Anak</span></button>
+
+    <!-- Kader -->
+    <div class="nav-section-label nav-role-label" data-roles="kader" style="margin-top:16px">Panduan</div>
+    <button class="nav-item" data-view="guide" data-roles="kader"><span class="nav-icon"></span><span>Panduan & Bantuan</span></button>
+
+    <!-- Kader & Admin -->
+    <div class="nav-section-label nav-role-label" data-roles="kader,admin" style="margin-top:16px">Riwayat</div>
+    <button class="nav-item" data-view="history" data-roles="kader,admin,ortu"><span class="nav-icon"></span><span>Riwayat Skrining</span></button>
+  </nav>
+  <div class="sidebar-footer">
+    <span class="status-dot"></span> Sistem aktif · Q-CHAT-10 + AI
+  </div>
+  <div class="sidebar-logout">
+    <div class="logout-user">
+      <div class="logout-avatar" id="sidebarAvatar">KP</div>
+      <div class="logout-info">
+        <div class="logout-name" id="sidebarName">Kader Posyandu</div>
+        <div class="logout-role" id="sidebarRole">Faskes Tingkat 1</div>
+      </div>
+    </div>
+    <button class="logout-btn" id="logoutBtn" title="Keluar">
+      <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+    </button>
+  </div>
+</aside>
+
+<!-- ===================== MAIN WRAPPER ===================== -->
+<div class="main-wrapper">
+
+  <!-- TOP BAR -->
+  <header class="topbar">
+    <button class="topbar-menu-btn" id="sidebarToggle" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="topbar-role" id="topbarRole">Kader Posyandu <span>— Faskes Tingkat 1</span></div>
+    <div class="topbar-actions">
+      <button class="topbar-btn" id="bellBtn" aria-label="Notifikasi"><i data-lucide="bell"></i>
+        <span class="bell-dot"></span>
+      </button>
+      <button class="topbar-btn more-btn" id="moreActionsBtn" aria-label="Aksi lainnya"><i data-lucide="ellipsis"></i></button>
+      <div class="quick-menu" id="quickMenu">
+        <button data-view="dashboard">Dashboard</button>
+        <button data-view="screening" data-roles="kader,ortu">Mulai Skrining</button>
+        <button id="quickLogout">Keluar</button>
+      </div>
+      <button class="topbar-btn theme-btn" id="themeToggle" aria-label="Ganti Tema">Dark</button>
+      <button class="topbar-avatar" id="topbarAvatar" aria-label="Logout">KP</button>
+    </div>
+  </header>
+
+  <div class="mobile-tabbar" id="mobileTabbar" data-roles="admin,kader,ortu">
+    <button class="mobile-tab active" data-view="dashboard" data-roles="admin,kader,ortu"><span></span><small>Beranda</small></button>
+    <button class="mobile-tab" data-view="progress" data-roles="ortu"><span></span><small>Progres</small></button>
+    <button class="mobile-tab" data-view="screening" data-roles="kader,ortu"><span></span><small>Skrining</small></button>
+    <button class="mobile-tab" data-view="education" data-roles="ortu"><span></span><small>Edukasi</small></button>
+    <button class="mobile-tab" data-view="history" data-roles="kader,ortu,admin"><span></span><small>Profil</small></button>
+  </div>
+
+  <button class="mobile-fab" id="mobileFab" data-view="screening" data-roles="kader,ortu" aria-label="Mulai skrining">+</button>
+  <button class="mobile-fab mobile-fab-admin" id="mobileFabAdmin" data-view="analytics" data-roles="admin" aria-label="Ekspor data">+</button>
+
+  <div class="mobile-sheet-backdrop" id="mobileSheetBackdrop"></div>
+
+  <!-- ===================== CONTENT AREA ===================== -->
+  <main class="content-area">
+
+    <!-- ======================================================= -->
+    <!-- VIEW: DASHBOARD                                          -->
+    <!-- ======================================================= -->
+    <div id="view-dashboard" class="view-panel active">
+      <div class="hero-banner">
+        <div class="hero-badge">Didukung Q-CHAT-10 &amp; IBM Bob AI Agent</div>
+        <h1>Akses Skrining Autisme Dini Inklusif<br>Berbasis AI Terintegrasi Seluruh Indonesia</h1>
+        <p>Membantu kader Posyandu &amp; orang tua melakukan deteksi risiko autisme secara terstruktur, akurat, dan berbasis standar klinis internasional.</p>
+        <button class="btn btn-white" data-view="screening">Mulai Skrining →</button>
+      </div>
+
+      <div class="stat-grid">
+        <div class="stat-card">
+          <div class="stat-icon si-blue"><i data-lucide="baby"></i></div>
+          <div class="stat-num" id="dashTotal">1,240</div>
+          <div class="stat-label">Total Anak Diperiksa</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon si-red"><i data-lucide="triangle-alert"></i></div>
+          <div class="stat-num" id="dashHigh">42</div>
+          <div class="stat-label">Risiko Tinggi Terdeteksi</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon si-green"><i data-lucide="file-text"></i></div>
+          <div class="stat-num" id="dashRef">38</div>
+          <div class="stat-label">Surat Rujukan Dikirim</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon si-purple"><i data-lucide="map-pin"></i></div>
+          <div class="stat-num" id="dashRegion">12</div>
+          <div class="stat-label">Wilayah Posyandu Aktif</div>
+        </div>
+      </div>
+
+      <div class="card mb-gap">
+        <div class="card-head">
+          <div>
+            <h3>Dataset Klinis Terintegrasi</h3>
+            <p class="muted small" id="total-dataset-count">6.075 Data Skrining Klinis Terintegrasi</p>
+          </div>
+          <span class="badge badge-low">Data Referensi AI</span>
+        </div>
+        <div class="stat-grid">
+          <div class="stat-card"><div class="stat-num" id="dataset-normal">4.271</div><div class="stat-label">Klasifikasi Normal</div></div>
+          <div class="stat-card"><div class="stat-num" id="dataset-risk">1.804</div><div class="stat-label">Klasifikasi Risiko</div></div>
+          <div class="stat-card"><div class="stat-num" id="dataset-male">3.508</div><div class="stat-label">Sampel Laki-laki</div></div>
+          <div class="stat-card"><div class="stat-num" id="dataset-female">2.567</div><div class="stat-label">Sampel Perempuan</div></div>
+          <div class="stat-card"><div class="stat-num" id="dataset-jaundice">1.045</div><div class="stat-label">Riwayat Jaundice</div></div>
+          <div class="stat-card"><div class="stat-num" id="dataset-family-asd">1.122</div><div class="stat-label">Riwayat Keluarga ASD</div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <h3>Aktivitas Skrining Terbaru</h3>
+          <button class="link-btn" data-view="history">Lihat Semua →</button>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead><tr>
+              <th>Nama Anak</th><th>Usia</th><th>Skor Q-CHAT</th><th>Hasil</th><th>Tanggal</th>
+            </tr></thead>
+            <tbody id="recentActivity">
+              <tr><td class="fw">An. Rafi</td><td>24 bln</td><td>18/30</td><td><span class="badge badge-high">RISIKO TINGGI</span></td><td class="muted">14/07/2026</td></tr>
+              <tr><td class="fw">An. Sari</td><td>18 bln</td><td>9/30</td><td><span class="badge badge-mid">PERLU PERHATIAN</span></td><td class="muted">13/07/2026</td></tr>
+              <tr><td class="fw">An. Budi</td><td>30 bln</td><td>4/30</td><td><span class="badge badge-low">RISIKO RENDAH</span></td><td class="muted">12/07/2026</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================= -->
+    <!-- VIEW: SCREENING (MULTI-STEP FORM)                        -->
+    <!-- ======================================================= -->
+    <div id="view-screening" class="view-panel">
+      <div class="form-card">
+        <!-- Progress Bar -->
+        <div class="progress-bar" id="progressBar">
+          <div class="pb-step active" data-s="1"><span class="pb-circle">1</span><span class="pb-label">Biodata</span></div>
+          <div class="pb-line" id="line12"></div>
+          <div class="pb-step" data-s="2"><span class="pb-circle">2</span><span class="pb-label">Komunikasi Sosial</span></div>
+          <div class="pb-line" id="line23"></div>
+          <div class="pb-step" data-s="3"><span class="pb-circle">3</span><span class="pb-label">Sensorik</span></div>
+          <div class="pb-line" id="line34"></div>
+          <div class="pb-step" data-s="4"><span class="pb-circle">4</span><span class="pb-label">Gaze Tracking</span></div>
+        </div>
+
+        <!-- STEP 1: BIODATA -->
+        <div class="wizard-step" id="step1">
+          <h3>Informasi Dasar Anak</h3>
+          <p class="step-desc">Masukkan data identitas untuk memulai skrining.</p>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Nama Anak</label>
+              <input type="text" id="cName" placeholder="Contoh: An. Budi">
+            </div>
+            <div class="form-group">
+              <label>Nama Orang Tua</label>
+              <input type="text" id="pName" placeholder="Contoh: Budi Santoso">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Usia Anak (Bulan)</label>
+              <input type="number" id="cAge" placeholder="Contoh: 24" min="12" max="60">
+            </div>
+            <div class="form-group">
+              <label>Jenis Kelamin</label>
+              <select id="cGender">
+                <option value="Laki-laki">Laki-laki</option>
+                <option value="Perempuan">Perempuan</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Nomor WhatsApp</label>
+              <input type="tel" id="cWa" placeholder="Contoh: 0812xxxxxxxx">
+            </div>
+            <div class="form-group">
+              <label>Pengisi / Hubungan</label>
+              <select id="cFiller">
+                <option value="Orang Tua (Ibu/Ayah)">Orang Tua (Ibu/Ayah)</option>
+                <option value="Kader Posyandu">Kader Posyandu</option>
+                <option value="Petugas Puskesmas">Petugas Puskesmas</option>
+              </select>
+            </div>
+          </div>
+          <button class="btn btn-outline-gps" id="gpsBtn">📍 Gunakan Lokasi Saat Ini</button>
+          <div class="gps-result" id="gpsResult"></div>
+          <div class="field-error" id="step1Error">Mohon lengkapi Nama Anak dan Usia terlebih dahulu.</div>
+          <div class="wizard-actions">
+            <button class="btn btn-primary" id="toStep2">Lanjut ke Komunikasi Sosial →</button>
+          </div>
+        </div>
+
+        <!-- STEP 2: KOMUNIKASI SOSIAL -->
+        <div class="wizard-step hidden" id="step2">
+          <h3>Komunikasi Sosial &amp; Interaksi</h3>
+          <p class="step-desc">Pilih opsi yang paling sesuai dengan perilaku anak sehari-hari.</p>
+          <div id="qBlock2" class="q-block"></div>
+          <div class="wizard-actions">
+            <button class="btn btn-ghost" data-back="1">← Kembali</button>
+            <button class="btn btn-primary" id="toStep3">Lanjut ke Sensorik →</button>
+          </div>
+        </div>
+
+        <!-- STEP 3: SENSORIK -->
+        <div class="wizard-step hidden" id="step3">
+          <h3>Perilaku Sensorik &amp; Berulang</h3>
+          <p class="step-desc">Lanjutkan penilaian untuk pertanyaan perilaku sensorik.</p>
+          <div id="qBlock3" class="q-block"></div>
+          <div class="wizard-actions">
+            <button class="btn btn-ghost" data-back="2">← Kembali</button>
+            <button class="btn btn-primary" id="toStep4">Lanjut ke Gaze Tracking →</button>
+          </div>
+        </div>
+
+        <!-- STEP 4: GAZE TRACKING -->
+        <div class="wizard-step hidden" id="step4">
+          <h3>Simulasi Fokus Visual (Gaze Tracking)</h3>
+          <p class="step-desc">Posisikan anak menghadap layar. Amati respons atensi terhadap stimulus selama ±8 detik.</p>
+          <div class="cam-box">
+            <div class="cam-header">
+              <span class="cam-dot" id="camDot"></span>
+              <span id="camLabel">KAMERA NONAKTIF</span>
+              <span class="pulse-text" id="calibText" style="display:none;color:#10B981;margin-left:auto">● AI Eye-Tracking Calibration: Active</span>
+            </div>
+            <div class="cam-view" id="camContainer">
+              <video id="camVideo" autoplay playsinline muted></video>
+              <div class="cam-fallback" id="camFallback">
+                <p id="camFallbackText">Kamera belum aktif. Tekan tombol di bawah untuk mengaktifkan.</p>
+              </div>
+              <div class="neon-dot" id="neonDot" style="display:none;"></div>
+            </div>
+          </div>
+          <div class="gaze-metrics">
+            <div class="gaze-metric-row">
+              <span>Stabilitas Fokus Visual</span>
+              <strong id="focusPct">0%</strong>
+            </div>
+            <div class="metric-bar">
+              <div class="metric-fill" id="meterFill"></div>
+            </div>
+            <p class="gaze-status" id="gazeStatus">Tekan "Aktifkan Kamera &amp; Mulai" untuk memulai simulasi.</p>
+          </div>
+          <div class="wizard-actions">
+            <button class="btn btn-ghost" data-back="3">← Kembali</button>
+            <button class="btn btn-accent" id="startGaze">🎥 Aktifkan Kamera &amp; Mulai</button>
+            <button class="btn btn-primary" id="toResults" disabled>Kirim &amp; Analisis AI →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================= -->
+    <!-- VIEW: ANALYTICS                                          -->
+    <!-- ======================================================= -->
+    <div id="view-analytics" class="view-panel">
+      <div class="page-header">
+        <h2>Analitik &amp; Tren</h2>
+        <p>Data historis skrining SmartChild AI seluruh wilayah</p>
+      </div>
+      <div class="analytics-kpi-grid">
+        <div class="analytics-kpi"><span class="analytics-kpi-icon"><i data-lucide="baby"></i></span><strong>1.240</strong><small>Total Anak Diperiksa</small></div>
+        <div class="analytics-kpi"><span class="analytics-kpi-icon is-warning"><i data-lucide="triangle-alert"></i></span><strong>42</strong><small>Risiko Tinggi Terdeteksi</small></div>
+        <div class="analytics-kpi"><span class="analytics-kpi-icon is-success"><i data-lucide="file-check-2"></i></span><strong>38</strong><small>Surat Rujukan Dikirim</small></div>
+        <div class="analytics-kpi"><span class="analytics-kpi-icon is-purple"><i data-lucide="map"></i></span><strong>12</strong><small>Wilayah Posyandu Aktif</small></div>
+      </div>
+      <div class="card mb-gap analytics-trend-card">
+        <div class="card-head">
+          <h3>Tren Skrining 6 Bulan Terakhir</h3>
+          <span class="muted small">Data kumulatif simulasi + aktual</span>
+        </div>
+        <div class="chart-wrap">
+          <canvas id="trendChart"></canvas>
+        </div>
+      </div>
+      <div class="two-col">
+        <div class="card">
+          <div class="card-head"><h3>Distribusi Tingkat Risiko</h3></div>
+          <div class="chart-wrap chart-sm">
+            <canvas id="donutChart"></canvas>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><h3>Wilayah Aktif</h3></div>
+          <ul class="region-list">
+            <li><span class="rdot rdot-green"></span><span>Posyandu Melati — Jakarta Timur</span><span class="region-count">128</span></li>
+            <li><span class="rdot rdot-green"></span><span>Puskesmas Cempaka Putih — Jak-Pus</span><span class="region-count">94</span></li>
+            <li><span class="rdot rdot-amber"></span><span>Posyandu Mawar — Depok</span><span class="region-count">76</span></li>
+            <li><span class="rdot rdot-green"></span><span>Puskesmas Sawangan — Depok</span><span class="region-count">67</span></li>
+            <li><span class="rdot rdot-red"></span><span>Posyandu Dahlia — Bekasi Selatan</span><span class="region-count">55</span></li>
+            <li><span class="rdot rdot-amber"></span><span>Posyandu Kenanga — Bogor Tengah</span><span class="region-count">48</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================= -->
+    <!-- VIEW: GUIDE                                              -->
+    <!-- ======================================================= -->
+    <div id="view-guide" class="view-panel">
+      <div class="page-header">
+        <h2><i data-lucide="info"></i> Panduan &amp; Bantuan</h2>
+        <p>Cara menggunakan SmartChild AI dan informasi kontak dukungan teknis</p>
+      </div>
+
+      <!-- Panduan Penggunaan -->
+      <div class="guide-grid" style="margin-bottom:24px">
+        <div class="guide-card">
+          <div class="guide-num">01</div>
+          <h4>Kuesioner Q-CHAT-10</h4>
+          <p>Instrumen klinis standar internasional — 10 pertanyaan perilaku kuantitatif untuk balita usia 18–30 bulan yang telah tervalidasi secara ilmiah.</p>
+        </div>
+        <div class="guide-card">
+          <div class="guide-num">02</div>
+          <h4>Simulasi Fokus Visual</h4>
+          <p>Fitur penunjang berbasis kamera perangkat untuk mengamati respons atensi visual anak secara real-time menggunakan stimulus bergerak.</p>
+        </div>
+        <div class="guide-card">
+          <div class="guide-num">03</div>
+          <h4>Analisis AI &amp; Surat Rujukan</h4>
+          <p>Hasil diproses oleh IBM Bob AI Agent untuk menghasilkan tingkat risiko komprehensif serta draf surat rujukan medis siap cetak.</p>
+        </div>
+        <div class="guide-card">
+          <div class="guide-num">04</div>
+          <h4>Interpretasi Skor</h4>
+          <p>Skor Q-CHAT ≤7: Risiko Rendah. Skor 8–14: Perlu Perhatian. Skor ≥15: Risiko Tinggi — segera rujuk ke dokter spesialis anak.</p>
+        </div>
+        <div class="guide-card">
+          <div class="guide-num">05</div>
+          <h4>Privasi Data</h4>
+          <p>Semua data skrining tersimpan hanya di perangkat lokal (localStorage). Tidak ada data yang dikirim ke server tanpa persetujuan eksplisit.</p>
+        </div>
+        <div class="guide-card">
+          <div class="guide-num">06</div>
+          <h4>FAQ — Pertanyaan Umum</h4>
+          <p>Apakah aplikasi ini gratis? Ya, 100% gratis. Apakah bisa offline? Ya, kecuali fitur peta dan video edukasi memerlukan internet.</p>
+        </div>
+      </div>
+
+      <!-- Kontak & Dukungan -->
+      <div class="card">
+        <div class="card-head">
+          <h3><i data-lucide="phone-call"></i> Kontak &amp; Dukungan</h3>
+          <span class="badge badge-low">Respons dalam 1×24 jam</span>
+        </div>
+        <div class="contact-grid">
+
+          <!-- WhatsApp -->
+          <div class="contact-card">
+            <div class="contact-icon" style="background:#D1FAE5"><i data-lucide="message-circle"></i></div>
+            <div class="contact-info">
+              <h4>WhatsApp Support</h4>
+              <p class="muted small">Hubungi langsung tim teknis SmartChild AI</p>
+              <a href="https://wa.me/6285693725069" target="_blank" rel="noopener" class="contact-btn contact-btn-green">
+                <i data-lucide="message-circle"></i> Chat via WhatsApp
+              </a>
+            </div>
+          </div>
+
+          <!-- Email -->
+          <div class="contact-card">
+            <div class="contact-icon" style="background:#DBEAFE"><i data-lucide="mail"></i></div>
+            <div class="contact-info">
+              <h4>Email Dukungan</h4>
+              <p class="muted small">Kirim pertanyaan atau laporan bug via email</p>
+              <a href="mailto:pitriwulandari204@gmail.com?subject=Bantuan%20Teknis%20SmartChild%20AI" class="contact-btn contact-btn-blue">
+                <i data-lucide="mail"></i> Kirim Email
+              </a>
+            </div>
+          </div>
+
+          <!-- Pelatihan -->
+          <div class="contact-card">
+            <div class="contact-icon" style="background:#EDE9FE"><i data-lucide="graduation-cap"></i></div>
+            <div class="contact-info">
+              <h4>Modul Pelatihan Kader</h4>
+              <p class="muted small">Panduan lengkap penggunaan untuk kader Posyandu</p>
+              <a href="https://wa.me/6285693725069?text=Halo%2C%20saya%20ingin%20mendapatkan%20modul%20pelatihan%20SmartChild%20AI." target="_blank" rel="noopener" class="contact-btn contact-btn-purple">
+                <i data-lucide="graduation-cap"></i> Minta Modul Pelatihan
+              </a>
+            </div>
+          </div>
+
+          <!-- Laporan Bug -->
+          <div class="contact-card">
+            <div class="contact-icon" style="background:#FEF3C7"><i data-lucide="bug"></i></div>
+            <div class="contact-info">
+              <h4>Laporkan Masalah</h4>
+              <p class="muted small">Temukan bug atau fitur tidak berjalan?</p>
+              <a href="mailto:pitriwulandari204@gmail.com?subject=Bug%20Report%20SmartChild%20AI&body=Deskripsi%20masalah%3A%0A%0ALangkah%20reproduksi%3A%0A%0ABrowser%2FPerangkat%3A" class="contact-btn contact-btn-amber">
+                <i data-lucide="bug"></i> Laporkan Bug
+              </a>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Info tambahan -->
+        <div class="contact-info-box">
+          <div class="contact-info-item">
+            <span class="contact-info-label"><i data-lucide="map-pin"></i> Alamat Tim</span>
+            <span>Gedung Inovasi Digital, Jakarta Selatan, DKI Jakarta 12190</span>
+          </div>
+          <div class="contact-info-item">
+            <span class="contact-info-label"><i data-lucide="clock"></i> Jam Operasional</span>
+            <span>Senin – Jumat, 08.00 – 17.00 WIB</span>
+          </div>
+          <div class="contact-info-item">
+            <span class="contact-info-label"><i data-lucide="globe"></i> Website</span>
+            <a href="#" style="color:#2563EB">www.smartchild.ai</a>
+          </div>
+          <div class="contact-info-item">
+            <span class="contact-info-label"><i data-lucide="smartphone"></i> Versi Aplikasi</span>
+            <span>SmartChild AI</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================= -->
+    <!-- VIEW: HISTORY                                            -->
+    <!-- ======================================================= -->
+    <div id="view-history" class="view-panel">
+      <div class="page-header-row">
+        <div>
+          <h2>Riwayat Skrining</h2>
+          <p>Semua hasil skrining tersimpan di perangkat ini</p>
+        </div>
+        <div class="btn-group">
+          <button class="btn btn-ghost-danger" id="clearHistory">Hapus Semua</button>
+          <button class="btn btn-ghost-danger" id="profileLogout"><i data-lucide="log-out"></i> Logout</button>
+        </div>
+      </div>
+      <div class="card">
+        <div id="historyEmpty" class="empty-state">
+          <div class="empty-icon">📋</div>
+          <p>Belum ada riwayat skrining.</p>
+          <p class="muted">Selesaikan satu sesi skrining untuk melihat data di sini.</p>
+          <button class="btn btn-primary" style="margin-top:14px" data-view="screening">Mulai Skrining</button>
+        </div>
+        <div id="historyTableWrap" class="table-wrap hidden">
+          <table class="data-table" id="historyTable">
+            <thead><tr>
+              <th>#</th><th>Nama Anak</th><th>Usia</th><th>Kelamin</th><th>Pengisi</th><th>Skor Q-CHAT</th><th>Fokus Visual</th><th>Hasil</th><th>Tanggal</th>
+            </tr></thead>
+            <tbody id="historyBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================= -->
+    <!-- VIEW: RESULTS                                            -->
+    <!-- ======================================================= -->
+    <div id="view-results" class="view-panel">
+      <div class="page-header-row">
+        <h2>Hasil Analisis &amp; Surat Rujukan</h2>
+        <div class="btn-group">
+          <button class="btn btn-ghost" id="restartBtn">🔄 Skrining Ulang</button>
+          <button class="btn btn-primary" id="printBtn">🖨 Cetak / Unduh PDF</button>
+        </div>
+      </div>
+
+      <!-- Risk Banner -->
+      <div class="risk-banner" id="riskBanner">
+        <div class="risk-score-box">
+          <span id="riskNum">0%</span>
+          <small id="riskTag">RISIKO</small>
+        </div>
+        <div class="risk-info">
+          <h3 id="riskTitle">Memuat hasil...</h3>
+          <p id="riskDesc">Hasil kalkulasi otomatis berdasarkan instrumen Q-CHAT-10.</p>
+        </div>
+      </div>
+      <div class="card mb-gap">
+        <div class="card-head"><h4>Analisis Langflow AI</h4><span class="badge badge-low">AI Agent</span></div>
+        <p id="aiAnalysisResult" class="muted">Analisis AI akan muncul setelah hasil skrining dikirim.</p>
+      </div>
+
+      <!-- Results Grid -->
+      <div class="results-grid">
+        <div class="card">
+          <h4>Rincian Parameter Klinis</h4>
+          <div id="breakdown" class="breakdown-list"></div>
+        </div>
+        <div class="card">
+          <h4>Rekomendasi Stimulasi &amp; Tindakan</h4>
+          <div id="guideList" class="acc-list"></div>
+        </div>
+      </div>
+
+      <!-- Map -->
+      <div class="card">
+        <div class="card-head">
+          <h4>🗺️ Fasilitas Kesehatan Terdekat</h4>
+          <span class="badge badge-low">📍 Berdasarkan Simulasi Lokasi GPS</span>
+        </div>
+        <div class="map-box">
+          <iframe
+            id="mapIframe"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d126748.54624185702!2d106.7271541!3d-6.2297465!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f3e945e34b9d%3A0x5371bf0fdad786a2!2sRSUD%20Pasar%20Rebo!5e0!3m2!1sid!2sid!4v1720000000000"
+            style="width:100%;height:320px;border:0;border-radius:12px;display:block;"
+            allowfullscreen loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade">
+          </iframe>
+
+          <!-- Fallback jika iframe diblokir -->
+          <div class="map-fallback" id="mapFallback">
+            <div class="map-fallback-inner">
+              <div style="font-size:40px;margin-bottom:12px">🗺️</div>
+              <p style="font-weight:700;color:#1E293B;margin-bottom:6px">Peta tidak dapat dimuat</p>
+              <p style="font-size:12px;color:#64748B;margin-bottom:14px">Buka via browser dengan koneksi internet aktif, atau klik tombol di bawah untuk membuka di Google Maps.</p>
+              <a href="https://maps.google.com/?q=RSUD+Pasar+Rebo+Jakarta" target="_blank" rel="noopener" class="btn btn-primary" style="text-decoration:none;font-size:13px">
+                Buka di Google Maps →
+              </a>
+            </div>
+          </div>
+
+          <div class="map-overlay-info" id="mapInfo">
+            <div class="map-info-row">
+              <div>
+                <strong>🏥 RSUD Pasar Rebo</strong> · Poli Tumbuh Kembang Anak<br>
+                <span class="muted small">Jl. Letjen TB Simatupang No.30, Jakarta Timur · ±2.4 km</span>
+              </div>
+              <a href="https://maps.google.com/?q=RSUD+Pasar+Rebo+Jakarta" target="_blank" rel="noopener" class="btn btn-ghost" style="font-size:12px;padding:6px 12px;flex-shrink:0;text-decoration:none">
+                Buka Maps →
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Medical Letter (print target) -->
+      <div id="printTarget" class="medical-letter">
+        <div class="letter-header">
+          <div class="letter-kop">
+            <h4>PEMERINTAH KABUPATEN / KOTA</h4>
+            <h3>POSYANDU &amp; PUSKESMAS KESEHATAN ANAK</h3>
+            <p>Layanan Skrining Tumbuh Kembang Terintegrasi SmartChild AI</p>
+          </div>
+          <hr class="letter-hr">
+        </div>
+        <div class="letter-meta">
+          <span id="letterNo">No: SC/00/0000</span>
+          <span id="letterDate">Tanggal: 00/00/0000</span>
+        </div>
+        <div class="letter-body">
+          <p id="letterPerihal"><strong>Perihal:</strong> Laporan Hasil Skrining Q-CHAT-10</p>
+          <br>
+          <p>Kepada Yth. Sejawat Dokter Spesialis Anak / Psikolog Tumbuh Kembang,</p>
+          <p>Di Tempat</p>
+          <br>
+          <p id="letterOpening">Bersama surat ini kami sampaikan hasil skrining klinis anak sebagai berikut:</p>
+          <ul class="letter-list">
+            <li>Nama Anak : <strong id="ltName">-</strong></li>
+            <li>Usia : <strong id="ltAge">-</strong></li>
+            <li>Jenis Kelamin : <strong id="ltGender">-</strong></li>
+            <li>Nama Orang Tua : <strong id="ltParent">-</strong></li>
+            <li>Pengisi Skrining : <strong id="ltFiller">-</strong></li>
+            <li>Hasil Indikasi : <strong id="ltResult">-</strong></li>
+            <li>Rekomendasi : <strong id="ltRec">-</strong></li>
+          </ul>
+          <p id="letterClosing">Demikian surat ini disampaikan. Atas perhatian dan kerja sama yang baik, kami ucapkan terima kasih.</p>
+        </div>
+        <div class="letter-footer">
+          <div class="signature-box">
+            <p>Pemeriksa / Kader Posyandu,</p>
+            <br><br>
+            <p><strong>( ________________________ )</strong></p>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /view-results -->
+
+    <!-- ======================================================= -->
+    <!-- VIEW: EDUKASI ORANG TUA                                  -->
+    <!-- ======================================================= -->
+    <div id="view-education" class="view-panel">
+      <div class="page-header">
+        <h2>📚 Edukasi Orang Tua</h2>
+        <p>Artikel, video, dan panduan untuk memahami autisme &amp; tumbuh kembang anak</p>
+      </div>
+
+      <!-- Filter Kategori -->
+      <div class="edu-filter-bar">
+        <button class="edu-filter-btn active" data-cat="all">Semua</button>
+        <button class="edu-filter-btn" data-cat="autism">Autisme &amp; ASD</button>
+        <button class="edu-filter-btn" data-cat="stimulasi">Stimulasi Dini</button>
+        <button class="edu-filter-btn" data-cat="nutrisi">Nutrisi &amp; Gizi</button>
+        <button class="edu-filter-btn" data-cat="psikologi">Psikologi Anak</button>
+      </div>
+
+      <!-- Video Edukasi -->
+      <div class="card mb-gap">
+        <div class="card-head">
+          <h3>🎬 Video Pilihan</h3>
+          <span class="muted small">Sumber terpercaya · YouTube</span>
+        </div>
+        <div class="video-grid">
+          <div class="video-card" data-cat="autism">
+            <div class="video-thumb">
+              <iframe src="https://www.youtube.com/embed/eJrex8_KQCs" title="Mengenali Ciri-Ciri Anak Autis Sejak Dini" frameborder="0" allowfullscreen loading="lazy"></iframe>
+            </div>
+            <div class="video-info">
+              <span class="video-tag tag-autism">Autisme &amp; ASD</span>
+              <h4>Mengenali Ciri-Ciri Anak Autis (ASD) Sejak Dini</h4>
+              <p>Video edukasi untuk membantu orang tua mengenali tanda awal autisme pada anak.</p>
+              <a class="contact-btn contact-btn-blue" href="https://www.youtube.com/watch?v=eJrex8_KQCs" target="_blank" rel="noopener">Tonton langsung di YouTube →</a>
+            </div>
+          </div>
+          <div class="video-card" data-cat="stimulasi">
+            <div class="video-thumb">
+              <iframe src="https://www.youtube.com/embed/2MavMJTTWZ4" title="7 Ciri Utama Autisme pada Anak" frameborder="0" allowfullscreen loading="lazy"></iframe>
+            </div>
+            <div class="video-info">
+              <span class="video-tag tag-stimulasi">Stimulasi Dini</span>
+              <h4>7 Ciri Utama Autisme pada Anak</h4>
+              <p>Video edukasi Yayasan MPATI tentang ciri utama autisme yang perlu diamati.</p>
+              <a class="contact-btn contact-btn-blue" href="https://www.youtube.com/watch?v=2MavMJTTWZ4" target="_blank" rel="noopener">Tonton langsung di YouTube →</a>
+            </div>
+          </div>
+          <div class="video-card" data-cat="autism">
+            <div class="video-thumb">
+              <iframe src="https://www.youtube.com/embed/Lh4nEBjkQaY" title="Intervensi Dini Autisme" frameborder="0" allowfullscreen loading="lazy"></iframe>
+            </div>
+            <div class="video-info">
+              <span class="video-tag tag-autism">Autisme &amp; ASD</span>
+              <h4>Pentingnya Intervensi Dini pada Anak Autisme</h4>
+              <p>Mengapa deteksi dan intervensi sebelum usia 3 tahun memberikan dampak terbesar bagi perkembangan anak.</p>
+            </div>
+          </div>
+          <div class="video-card" data-cat="nutrisi">
+            <div class="video-thumb">
+              <iframe src="https://www.youtube.com/embed/nCKY3F7j_dY" title="Nutrisi Anak" frameborder="0" allowfullscreen loading="lazy"></iframe>
+            </div>
+            <div class="video-info">
+              <span class="video-tag tag-nutrisi">Nutrisi &amp; Gizi</span>
+              <h4>Nutrisi Penting untuk Perkembangan Otak Balita</h4>
+              <p>Panduan gizi seimbang yang mendukung perkembangan kognitif dan motorik anak usia dini.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Artikel Edukasi -->
+      <div class="card">
+        <div class="card-head">
+          <h3>📰 Artikel Terpilih</h3>
+          <span class="muted small">Berdasarkan bukti ilmiah &amp; klinis</span>
+        </div>
+        <div class="article-list" id="articleList">
+
+          <div class="article-card" data-cat="autism">
+            <div class="article-tag tag-autism">Autisme &amp; ASD</div>
+            <h4>Mengenal Kondisi Penyakit Autis pada Anak Sejak Dini</h4>
+            <p>Informasi dasar untuk memahami autisme dan pentingnya mengenali tanda-tandanya sejak dini.</p>
+            <div class="article-tips">
+              <div class="tip-item">✅ Perhatikan kontak mata dan respons nama</div>
+              <div class="tip-item">✅ Amati kemampuan menunjuk dan bermain pura-pura</div>
+              <div class="tip-item">✅ Catat perkembangan bahasa setiap bulan</div>
+            </div>
+            <button class="article-toggle">Baca selengkapnya ▼</button>
+            <div class="article-expand">
+              <p>Autisme merupakan kondisi perkembangan saraf yang memengaruhi komunikasi, interaksi sosial, dan perilaku. Skrining membantu mengenali kebutuhan anak lebih awal.</p>
+              <p style="margin-top:8px"><a href="https://www.halodoc.com/artikel/mengenal-kondisi-penyakit-autis-pada-anak-sejak-dini" target="_blank" rel="noopener">Baca artikel Halodoc →</a></p>
+              <p style="margin-top:8px"><a href="https://www.herminahospitals.com/id/articles/mengenali-ciri-ciri-anak-autis-sejak-dini" target="_blank" rel="noopener">Baca artikel Hermina Hospitals →</a></p>
+            </div>
+          </div>
+
+          <div class="article-card" data-cat="stimulasi">
+            <div class="article-tag tag-stimulasi">Stimulasi Dini</div>
+            <h4>Pahami Mengapa Stimulasi Adalah Kunci Tumbuh Kembang Anak</h4>
+            <p>Stimulasi dini yang sesuai membantu mendukung perkembangan kemampuan anak secara menyeluruh.</p>
+            <div class="article-tips">
+              <div class="tip-item">✅ Bermain cilukba untuk melatih objek permanen</div>
+              <div class="tip-item">✅ Nyanyikan lagu anak sambil bertepuk tangan</div>
+              <div class="tip-item">✅ Baca buku bergambar setiap malam</div>
+            </div>
+            <button class="article-toggle">Baca selengkapnya ▼</button>
+            <div class="article-expand">
+              <p>Pilih aktivitas sederhana sesuai usia anak dan lakukan secara rutin dalam suasana yang menyenangkan.</p>
+              <p style="margin-top:8px"><a href="https://www.halodoc.com/artikel/pahami-mengapa-stimulasi-adalah-kunci-tumbuh-kembang-anak" target="_blank" rel="noopener">Baca artikel Halodoc →</a></p>
+              <p style="margin-top:8px"><a href="https://www.halodoc.com/artikel/cara-melatih-kecerdasan-bayi-7-bulan-main-sambil-belajar" target="_blank" rel="noopener">Baca artikel stimulasi bayi →</a></p>
+            </div>
+          </div>
+
+          <div class="article-card" data-cat="psikologi">
+            <div class="article-tag tag-psikologi">Psikologi Anak</div>
+            <h4>Pendekatan Psikologis dan Lingkungan Belajar Adaptif untuk Anak Autis</h4>
+            <p>Pendekatan psikologis dan lingkungan belajar yang adaptif dapat membantu mendukung kebutuhan anak autis.</p>
+            <div class="article-tips">
+              <div class="tip-item">✅ Tantrum: bertujuan mendapat sesuatu, bisa dihentikan</div>
+              <div class="tip-item">✅ Meltdown: respons sensorik/emosional yang kewalahan</div>
+              <div class="tip-item">✅ Tetap tenang dan ciptakan lingkungan yang aman</div>
+            </div>
+            <button class="article-toggle">Baca selengkapnya ▼</button>
+            <div class="article-expand">
+              <p>Kenali kebutuhan sensorik dan emosi anak, lalu sesuaikan komunikasi serta lingkungan belajarnya.</p>
+              <p style="margin-top:8px"><a href="https://jbasic.org/index.php/basicedu/article/download/8275/3518/30572" target="_blank" rel="noopener">Baca artikel Jurnal Basicedu →</a></p>
+              <p style="margin-top:8px"><a href="https://journal.nahnuinisiatif.com/ARJI/article/download/369/351" target="_blank" rel="noopener">Baca artikel Nahnu Inisiatif →</a></p>
+            </div>
+          </div>
+
+          <div class="article-card" data-cat="nutrisi">
+            <div class="article-tag tag-nutrisi">Nutrisi &amp; Gizi</div>
+            <h4>Panduan Nutrisi dan Makanan Sehat untuk Tumbuh Kembang Anak</h4>
+            <p>Panduan dasar memilih nutrisi dan makanan sehat untuk mendukung tumbuh kembang anak.</p>
+            <div class="article-tips">
+              <div class="tip-item">✅ DHA &amp; Omega-3: ikan salmon, tuna, telur</div>
+              <div class="tip-item">✅ Zat besi: daging merah, kacang-kacangan, bayam</div>
+              <div class="tip-item">✅ Zinc: tiram, biji labu, produk susu</div>
+            </div>
+            <button class="article-toggle">Baca selengkapnya ▼</button>
+            <div class="article-expand">
+              <p>Berikan makanan beragam dan seimbang sesuai kebutuhan usia anak. Konsultasikan kebutuhan khusus dengan tenaga kesehatan.</p>
+              <p style="margin-top:8px"><a href="https://www.alodokter.com/nutrisi-anak" target="_blank" rel="noopener">Baca panduan Alodokter →</a></p>
+              <p style="margin-top:8px"><a href="https://www.halodoc.com/artikel/pentingnya-gizi-seimbang-untuk-tumbuh-kembang-anak" target="_blank" rel="noopener">Baca artikel Halodoc →</a></p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================= -->
+    <!-- VIEW: PROGRES ANAK                                       -->
+    <!-- ======================================================= -->
+    <div id="view-progress" class="view-panel">
+      <div class="page-header">
+        <h2>🌱 Progres Anak</h2>
+        <p>Pantau pencapaian milestone tumbuh kembang anak sesuai usianya</p>
+      </div>
+
+      <!-- Selector Anak & Usia -->
+      <div class="card mb-gap">
+        <div class="progress-setup">
+          <div class="form-group">
+            <label>Nama Anak</label>
+            <input type="text" id="progName" placeholder="Nama anak yang dipantau">
+          </div>
+          <div class="form-group">
+            <label>Usia Saat Ini (Bulan)</label>
+            <input type="number" id="progAge" placeholder="Contoh: 24" min="1" max="60">
+          </div>
+          <button class="btn btn-primary" id="loadMilestones">Tampilkan Milestone →</button>
+        </div>
+      </div>
+
+      <!-- Hasil Milestone -->
+      <div id="milestonePanel" style="display:none">
+
+        <!-- Header progres -->
+        <div class="prog-header-card">
+          <div class="prog-header-info">
+            <div class="prog-avatar" id="progAvatar">A</div>
+            <div>
+              <h3 id="progNameDisplay">Nama Anak</h3>
+              <p id="progAgeDisplay" class="muted">0 bulan</p>
+            </div>
+          </div>
+          <div class="prog-summary">
+            <div class="prog-summary-item">
+              <span class="prog-sum-num" id="sumDone">0</span>
+              <span class="prog-sum-label">Tercapai ✅</span>
+            </div>
+            <div class="prog-summary-item">
+              <span class="prog-sum-num" id="sumPending">0</span>
+              <span class="prog-sum-label">Perlu Latihan 🔄</span>
+            </div>
+            <div class="prog-summary-item">
+              <span class="prog-sum-num" id="sumAlert">0</span>
+              <span class="prog-sum-label">Perhatian ⚠️</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Progress Bar Overall -->
+        <div class="card mb-gap">
+          <div class="card-head">
+            <h4>Progres Keseluruhan</h4>
+            <strong id="progPct" style="color:#2563EB">0%</strong>
+          </div>
+          <div class="metric-bar" style="height:12px;border-radius:6px">
+            <div class="metric-fill" id="progBar" style="border-radius:6px"></div>
+          </div>
+          <p class="muted small" style="margin-top:8px" id="progNote">Isi checklist di bawah untuk melihat progres.</p>
+        </div>
+
+        <!-- Domain Milestone -->
+        <div id="milestoneContent"></div>
+
+        <!-- Tombol Simpan -->
+        <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn btn-primary" id="saveProgress">💾 Simpan Progres</button>
+          <button class="btn btn-ghost" id="shareProgress">📤 Bagikan ke Dokter</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================= -->
+    <!-- VIEW: ADMIN — MANAJEMEN PENGGUNA                         -->
+    <!-- ======================================================= -->
+    <div id="view-admin-users" class="view-panel">
+      <div class="page-header">
+        <h2>👥 Manajemen Pengguna</h2>
+        <p>Kelola akun kader, admin, dan orang tua yang terdaftar di sistem</p>
+      </div>
+      <div class="admin-toolbar">
+        <input type="text" class="admin-search" placeholder="🔍 Cari nama atau username..." id="userSearch">
+        <button class="btn btn-primary" id="addUserBtn">+ Tambah Pengguna</button>
+      </div>
+      <div class="card">
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead><tr>
+              <th>#</th><th>Nama Lengkap</th><th>Username</th><th>Role</th><th>Wilayah</th><th>Status</th><th>Aksi</th>
+            </tr></thead>
+            <tbody id="userTableBody">
+              <tr><td>1</td><td class="fw">Siti Rahayu, A.Md.Keb</td><td>kader.melati</td><td><span class="role-badge rb-kader">Kader</span></td><td>Posyandu Melati, Jaktim</td><td><span class="badge badge-low">Aktif</span></td><td><button class="tbl-btn">✏️</button> <button class="tbl-btn tbl-btn-del">🗑️</button></td></tr>
+              <tr><td>2</td><td class="fw">Dewi Lestari</td><td>ortu</td><td><span class="role-badge rb-ortu">Orang Tua</span></td><td>Jakarta Timur</td><td><span class="badge badge-low">Aktif</span></td><td><button class="tbl-btn">✏️</button> <button class="tbl-btn tbl-btn-del">🗑️</button></td></tr>
+              <tr><td>3</td><td class="fw">Bidan Ani Kusuma</td><td>bidan</td><td><span class="role-badge rb-kader">Kader</span></td><td>Puskesmas Cempaka, Jakpus</td><td><span class="badge badge-low">Aktif</span></td><td><button class="tbl-btn">✏️</button> <button class="tbl-btn tbl-btn-del">🗑️</button></td></tr>
+              <tr><td>4</td><td class="fw">Bapak Dedi</td><td>ayah</td><td><span class="role-badge rb-ortu">Orang Tua</span></td><td>Depok</td><td><span class="badge badge-mid">Tidak Aktif</span></td><td><button class="tbl-btn">✏️</button> <button class="tbl-btn tbl-btn-del">🗑️</button></td></tr>
+              <tr><td>5</td><td class="fw">Ibu Ani Wijaya</td><td>ibu.ani</td><td><span class="role-badge rb-ortu">Orang Tua</span></td><td>Bekasi Selatan</td><td><span class="badge badge-low">Aktif</span></td><td><button class="tbl-btn">✏️</button> <button class="tbl-btn tbl-btn-del">🗑️</button></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================= -->
+    <!-- VIEW: ADMIN — DATA FASKES                                -->
+    <!-- ======================================================= -->
+    <div id="view-admin-faskes" class="view-panel">
+      <div class="page-header">
+        <h2>🏥 Data Fasilitas Kesehatan</h2>
+        <p>Kelola daftar Posyandu dan Puskesmas yang terdaftar dalam jaringan SmartChild AI</p>
+      </div>
+      <div class="admin-toolbar">
+        <input type="text" class="admin-search" placeholder="🔍 Cari nama faskes atau wilayah...">
+        <button class="btn btn-primary">+ Tambah Faskes</button>
+      </div>
+      <div class="faskes-grid">
+        <div class="faskes-card">
+          <div class="faskes-icon">🏥</div>
+          <div class="faskes-info">
+            <h4>Posyandu Melati</h4>
+            <p>Jl. Melati No. 12, Jakarta Timur</p>
+            <div class="faskes-meta"><span class="badge badge-low">Aktif</span><span class="muted small">128 anak terdaftar</span></div>
+          </div>
+          <div class="faskes-actions"><button class="tbl-btn">✏️</button></div>
+        </div>
+        <div class="faskes-card">
+          <div class="faskes-icon">🏢</div>
+          <div class="faskes-info">
+            <h4>Puskesmas Cempaka Putih</h4>
+            <p>Jl. Cempaka Putih Tengah, Jakarta Pusat</p>
+            <div class="faskes-meta"><span class="badge badge-low">Aktif</span><span class="muted small">94 anak terdaftar</span></div>
+          </div>
+          <div class="faskes-actions"><button class="tbl-btn">✏️</button></div>
+        </div>
+        <div class="faskes-card">
+          <div class="faskes-icon">🏥</div>
+          <div class="faskes-info">
+            <h4>Posyandu Mawar</h4>
+            <p>Jl. Mawar Indah, Depok</p>
+            <div class="faskes-meta"><span class="badge badge-mid">Perlu Verifikasi</span><span class="muted small">76 anak terdaftar</span></div>
+          </div>
+          <div class="faskes-actions"><button class="tbl-btn">✏️</button></div>
+        </div>
+        <div class="faskes-card">
+          <div class="faskes-icon">🏢</div>
+          <div class="faskes-info">
+            <h4>Puskesmas Sawangan</h4>
+            <p>Jl. Sawangan Raya No. 5, Depok</p>
+            <div class="faskes-meta"><span class="badge badge-low">Aktif</span><span class="muted small">67 anak terdaftar</span></div>
+          </div>
+          <div class="faskes-actions"><button class="tbl-btn">✏️</button></div>
+        </div>
+        <div class="faskes-card">
+          <div class="faskes-icon">🏥</div>
+          <div class="faskes-info">
+            <h4>Posyandu Dahlia</h4>
+            <p>Jl. Dahlia No. 3, Bekasi Selatan</p>
+            <div class="faskes-meta"><span class="badge badge-high">Perlu Perhatian</span><span class="muted small">55 anak terdaftar</span></div>
+          </div>
+          <div class="faskes-actions"><button class="tbl-btn">✏️</button></div>
+        </div>
+        <div class="faskes-card">
+          <div class="faskes-icon">🏥</div>
+          <div class="faskes-info">
+            <h4>Posyandu Kenanga</h4>
+            <p>Jl. Kenanga Raya, Bogor Tengah</p>
+            <div class="faskes-meta"><span class="badge badge-low">Aktif</span><span class="muted small">48 anak terdaftar</span></div>
+          </div>
+          <div class="faskes-actions"><button class="tbl-btn">✏️</button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================= -->
+    <!-- VIEW: ADMIN — PENGATURAN SISTEM                          -->
+    <!-- ======================================================= -->
+    <div id="view-admin-settings" class="view-panel">
+      <div class="page-header">
+        <h2>⚙️ Pengaturan Sistem</h2>
+        <p>Konfigurasi global SmartChild AI untuk seluruh jaringan Posyandu</p>
+      </div>
+      <div class="settings-grid">
+        <div class="card">
+          <h4>🔗 Integrasi Langflow AI</h4>
+          <div class="setting-group">
+            <label>Endpoint URL</label>
+            <input type="text" value="https://YOUR_LANGFLOW_ENDPOINT/api/v1/run/..." placeholder="Paste Langflow URL di sini">
+          </div>
+          <div class="setting-group">
+            <label>API Key / Bearer Token</label>
+            <div class="login-pass-wrap">
+              <input type="password" value="sk-••••••••••••••••" placeholder="Bearer Token">
+              <button type="button" class="login-eye" onclick="var i=this.previousElementSibling;i.type=i.type==='password'?'text':'password'">👁</button>
+            </div>
+          </div>
+          <button class="btn btn-primary" style="margin-top:8px">💾 Simpan Konfigurasi</button>
+        </div>
+        <div class="card">
+          <h4>📊 Parameter Skrining</h4>
+          <div class="setting-group">
+            <label>Batas Skor Risiko Rendah (≤)</label>
+            <input type="number" value="7" min="0" max="20">
+          </div>
+          <div class="setting-group">
+            <label>Batas Skor Risiko Sedang (≤)</label>
+            <input type="number" value="14" min="0" max="20">
+          </div>
+          <div class="setting-group">
+            <label>Bobot Q-CHAT vs Gaze Tracking (%)</label>
+            <input type="text" value="70 / 30" placeholder="70 / 30">
+          </div>
+          <button class="btn btn-primary" style="margin-top:8px">💾 Simpan Parameter</button>
+        </div>
+        <div class="card">
+          <h4>📤 Ekspor & Backup Data</h4>
+          <p class="muted small" style="margin-bottom:12px">Ekspor seluruh data skrining untuk keperluan pelaporan ke Dinas Kesehatan.</p>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <button class="btn btn-ghost">📥 Ekspor CSV — Semua Skrining</button>
+            <button class="btn btn-ghost">📥 Ekspor PDF — Laporan Bulanan</button>
+            <button class="btn btn-ghost btn-ghost-danger">🗑 Hapus Semua Data (Reset)</button>
+          </div>
+        </div>
+        <div class="card">
+          <h4>🔔 Notifikasi & Alert</h4>
+          <div class="setting-toggle-list">
+            <div class="setting-toggle-item">
+              <div><strong>Alert Risiko Tinggi</strong><div class="muted small">Kirim notif ke admin saat ada kasus risiko tinggi</div></div>
+              <label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+            </div>
+            <div class="setting-toggle-item">
+              <div><strong>Laporan Mingguan</strong><div class="muted small">Rekap skrining otomatis setiap Senin pagi</div></div>
+              <label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+            </div>
+            <div class="setting-toggle-item">
+              <div><strong>Reminder Kunjungan</strong><div class="muted small">Ingatkan orang tua untuk kunjungan rutin</div></div>
+              <label class="toggle-switch"><input type="checkbox"><span class="toggle-slider"></span></label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div><!-- /main-wrapper -->
+
+<!-- ===================== PROCESSING OVERLAY ===================== -->
+<div id="processingOverlay">
+  <div class="proc-inner">
+    <div class="proc-ring-wrap">
+      <div class="proc-ring"></div>
+    </div>
+    <h3 class="proc-title">AI Agent Sedang Menganalisis Data...</h3>
+    <p class="proc-sub">Memproses skor Q-CHAT-10 dan matriks perilaku anak</p>
+    <div class="console-box" id="consoleBox"></div>
+  </div>
+</div>
+
+<!-- ===================== SIDEBAR OVERLAY (mobile) ===================== -->
+<div id="sidebarOverlay" class="sidebar-overlay"></div>
+
+<script src="script.js"></script>
+</body>
+</html>
