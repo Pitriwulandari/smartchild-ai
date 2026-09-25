@@ -66,12 +66,6 @@
       </button>
     </form>
 
-    <!-- Demo hint -->
-    <div class="login-demo">
-      <span>Demo kredensial:</span>
-      <code id="demoHint">kader / posyandu123</code>
-    </div>
-
     <div class="login-footer">
       SmartChild AI  · Sistem Skrining Autisme Dini Indonesia
     </div>
@@ -164,7 +158,7 @@
     <button class="mobile-tab" data-view="progress" data-roles="ortu"><span></span><small>Progres</small></button>
     <button class="mobile-tab" data-view="screening" data-roles="kader,ortu"><span></span><small>Skrining</small></button>
     <button class="mobile-tab" data-view="education" data-roles="ortu"><span></span><small>Edukasi</small></button>
-    <button class="mobile-tab" data-view="history" data-roles="kader,ortu,admin"><span></span><small>Profil</small></button>
+    <button class="mobile-tab" data-view="profile" data-roles="kader,ortu,admin"><span></span><small>Profil</small></button>
   </div>
 
   <button class="mobile-fab" id="mobileFab" data-view="screening" data-roles="kader,ortu" aria-label="Mulai skrining">+</button>
@@ -504,7 +498,7 @@
 
           <!-- Laporan Bug -->
           <div class="contact-card">
-            <div class="contact-icon" style="background:#FEF3C7"><i data-lucide="bug"></i></div>
+            <div class="contact-icon" style="background:#EDE9FE"><i data-lucide="bug"></i></div>
             <div class="contact-info">
               <h4>Laporkan Masalah</h4>
               <p class="muted small">Temukan bug atau fitur tidak berjalan?</p>
@@ -1107,5 +1101,14 @@
 <div id="sidebarOverlay" class="sidebar-overlay"></div>
 
 <script src="script.js"></script>
+<div class="langflow-disclaimer">Catatan: AI ini hanya alat bantu skrining awal dan bukan pengganti diagnosis medis profesional.</div>
+<script
+  src="https://cdn.jsdelivr.net/gh/langflow-ai/langflow-embedded-chat@v1.0.8/dist/build/static/js/bundle.min.js">
+</script>
+<langflow-chat
+  window_title="Skrining Autisme AI"
+  flow_id="b528e1bb-c486-4f48-b130-94a5af4a2aa9"
+  host_url="http://127.0.0.1:7860">
+</langflow-chat>
 </body>
 </html>

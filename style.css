@@ -1123,21 +1123,21 @@ input:focus, select:focus { border-color: #2563EB; box-shadow: 0 0 0 3px rgba(37
 
 /* ---------- Print ---------- */
 @media print {
-  body { display: block !important; background: #fff !important; }
+  html, body { margin: 0 !important; background: #fff !important; }
   body > * { display: none !important; }
   body > .main-wrapper { display: block !important; margin: 0 !important; }
-  .main-wrapper > .topbar,
-  .main-wrapper > .content-area > * { display: none !important; }
-  .main-wrapper > .content-area,
-  .main-wrapper > .content-area > #view-results,
-  #view-results.view-panel,
-  #view-results #printTarget { display: block !important; }
+  .main-wrapper > .topbar { display: none !important; }
+  .main-wrapper > .mobile-tabbar,
+  .main-wrapper > .mobile-fab,
+  .main-wrapper > .mobile-sheet-backdrop,
+  .main-wrapper > .mobile-sheet { display: none !important; }
+  .main-wrapper > .content-area { display: block !important; padding: 0 !important; overflow: visible !important; }
+  .main-wrapper > .content-area > .view-panel { display: none !important; }
+  .main-wrapper > .content-area > #view-results { display: block !important; }
+  #view-results > *:not(#printTarget) { display: none !important; }
   #printTarget,
-  #printTarget * {
-    visibility: visible !important;
-    color: #1E293B !important;
-  }
-  #printTarget { position: static; padding: 24px; background: #fff !important; }
+  #printTarget * { visibility: visible !important; color: #1E293B !important; }
+  #printTarget { display: block !important; position: relative !important; width: 100% !important; margin: 0 !important; padding: 24px !important; background: #fff !important; }
   .medical-letter { box-shadow: none; border: none; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 }
 
@@ -1303,12 +1303,12 @@ body.dark .prog-sum-num { color: #F1F5F9; }
   font-size: 13px; transition: all 0.18s; margin-top: 1px;
 }
 .milestone-item.done .milestone-check  { background: #10B981; border-color: #10B981; color: #fff; }
-.milestone-item.alert .milestone-check { background: #FEF3C7; border-color: #F59E0B; }
+.milestone-item.alert .milestone-check { background: #D8F5E5; border-color: #6EE7B7; color: #047857; }
 .milestone-text { flex: 1; }
 .milestone-text strong { font-size: 13px; font-weight: 600; color: #1E293B; display: block; }
 .milestone-text span   { font-size: 11.5px; color: #64748B; line-height: 1.4; }
 .milestone-item.done  .milestone-text strong { color: #065F46; }
-.milestone-item.alert .milestone-text strong { color: #92400E; }
+.milestone-item.alert .milestone-text strong { color: #047857; }
 body.dark .milestone-domain { background: #1E293B; border-color: #334155; }
 body.dark .milestone-domain-head { background: #0F172A; }
 body.dark .milestone-domain-head:hover { background: #253347; }
@@ -1318,6 +1318,8 @@ body.dark .milestone-item:hover { background: #253347; }
 body.dark .milestone-text strong { color: #F1F5F9; }
 body.dark .milestone-text span   { color: #64748B; }
 body.dark .milestone-item.done .milestone-text strong { color: #6EE7B7; }
+body.dark .milestone-item.alert .milestone-check { background: #16352C; border-color: #6EE7B7; color: #A7F3D0; }
+body.dark .milestone-item.alert .milestone-text strong { color: #A7F3D0; }
 
 /* ---------- Theme toggle fix ---------- */
 .theme-btn { font-size: 18px; line-height: 1; padding: 6px 8px; }
@@ -1435,8 +1437,8 @@ body.dark .setting-toggle-item strong { color:#F1F5F9; }
 .contact-btn-blue:hover   { background: #2563EB; color: #fff; }
 .contact-btn-purple { background: #EDE9FE; color: #5B21B6; }
 .contact-btn-purple:hover { background: #7C3AED; color: #fff; }
-.contact-btn-amber  { background: #FEF3C7; color: #92400E; }
-.contact-btn-amber:hover  { background: #F59E0B; color: #fff; }
+.contact-btn-amber  { background: #EDE9FE; color: #5B21B6; }
+.contact-btn-amber:hover  { background: #7C3AED; color: #fff; }
 
 .contact-info-box {
   display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -1495,6 +1497,36 @@ body.dark .setting-toggle-item strong { color:#F1F5F9; }
 }
 
 body.dark .contact-card { background: #0F172A; border-color: #334155; }
+
+body.dark {
+  background: #081512 !important;
+  color: #D8F5E5 !important;
+}
+body.dark::before { background: linear-gradient(120deg, rgba(16,185,129,0.08), transparent 50%, rgba(5,150,105,0.06)); }
+body.dark .main-wrapper { background: #081512 !important; }
+body.dark .contact-icon { background: #16352C !important; color: #A7F3D0 !important; }
+body.dark .contact-btn { border: 1px solid rgba(167,243,208,0.28); }
+body.dark .contact-btn-green,
+body.dark .contact-btn-blue,
+body.dark .contact-btn-purple { background: #16352C !important; color: #A7F3D0 !important; }
+body.dark .contact-btn-amber { background: #16352C !important; color: #A7F3D0 !important; }
+body.dark .topbar-btn,
+body.dark .theme-btn { background: #16352C !important; border-color: rgba(167,243,208,0.3) !important; color: #D8F5E5 !important; }
+body.dark .topbar-btn svg,
+body.dark .topbar-btn i svg { color: #D8F5E5 !important; stroke: #D8F5E5 !important; }
+body.dark .topbar-btn:hover,
+body.dark .theme-btn:hover { background: #1E5142 !important; color: #F4FFF9 !important; }
+body.dark .topbar-menu-btn span { background: #D8F5E5 !important; }
+body.dark .contact-info-label { color: #D8F5E5 !important; }
+
+body[data-page-role="ortu"] .stat-grid-compact { align-items: stretch; }
+body[data-page-role="ortu"] .stat-grid-compact .stat-card { justify-content: flex-start; text-align: left; }
+.utility-panel-content { display: grid; gap: 12px; }
+.profile-summary { display: grid; gap: 6px; font-size: 14px; }
+.profile-summary strong { font-size: 20px; color: var(--ink-900); }
+.verification-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px; border: 1px solid rgba(148,163,184,0.24); border-radius: 10px; }
+body.dark .profile-summary strong { color: #D8F5E5; }
+body.dark .verification-row { border-color: #334155; }
 
 /* ============================================================
    EMERALD MINT CREAM GLASS THEME
@@ -1665,7 +1697,7 @@ input:focus, select:focus { border-color: var(--emerald-500) !important; box-sha
 .si-red,
 .badge-high,
 .tag-autism,
-.contact-btn-amber { background: #f7e4cf !important; color: #9a4d22 !important; }
+.contact-btn-amber { background: var(--mint-100) !important; color: var(--emerald-700) !important; }
 .metric-fill,
 .pb-line.done,
 .pb-step.done .pb-circle,
@@ -2296,4 +2328,13 @@ body.dark .q-card {
   color: #D8F7E7 !important;
   border-color: rgba(167, 243, 208, 0.2) !important;
 }
+
+body.dark,
+body.dark .main-wrapper,
+body.dark .content-area { background: #081512 !important; }
+body.dark .contact-icon { background: #16352C !important; color: #A7F3D0 !important; }
+body.dark .contact-btn-green,
+body.dark .contact-btn-blue,
+body.dark .contact-btn-purple { background: #16352C !important; color: #A7F3D0 !important; }
+body.dark .contact-btn-amber { background: #16352C !important; color: #A7F3D0 !important; }
 

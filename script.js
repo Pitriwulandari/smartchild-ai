@@ -85,7 +85,7 @@
     }
 
     // Sembunyikan semua panel
-    allViewPanels.forEach(function (p) { p.classList.remove('active'); });
+    document.querySelectorAll('.view-panel').forEach(function (p) { p.classList.remove('active'); });
     // Tampilkan panel target
     var target = document.getElementById('view-' + viewId);
     if (target) { target.classList.add('active'); }
@@ -739,7 +739,9 @@
      10. PRINT
   ---------------------------------------------------------- */
   document.getElementById('printBtn').addEventListener('click', function () {
+    document.body.classList.add('printing-referral');
     window.print();
+    window.setTimeout(function () { document.body.classList.remove('printing-referral'); }, 1000);
   });
 
   /* ----------------------------------------------------------
@@ -781,16 +783,15 @@
   ---------------------------------------------------------- */
   function sendDataToLangflow(payloadData) {
     var LANGFLOW_ENDPOINT = 'http://127.0.0.1:7860/api/v1/run/b528e1bb-c486-4f48-b130-94a5af4a2aa9';
-    var LANGFLOW_API_KEY = 'YOUR_API_KEY_HERE';
+    var LANGFLOW_API_KEY = localStorage.getItem('sc_langflow_api_key') || 'sk-FCN94zbe1AvPlhZ_gcocIA_mX0DMCgXRbWsinBopu3Q';
     var promptInput = 'Analisis hasil skrining anak berikut dan berikan rekomendasi yang mudah dipahami: ' + JSON.stringify(payloadData);
     var sessionId = window.crypto && window.crypto.randomUUID
       ? window.crypto.randomUUID()
       : 'smartchild-' + Date.now();
     var statusEl = document.getElementById('aiAnalysisResult');
 
-    if (LANGFLOW_API_KEY === 'YOUR_API_KEY_HERE') {
-      if (statusEl) statusEl.textContent = 'API key Langflow belum diisi. Isi LANGFLOW_API_KEY di script.js terlebih dahulu.';
-      console.warn('[SmartChild AI] LANGFLOW_API_KEY masih menggunakan placeholder.');
+    if (!LANGFLOW_API_KEY) {
+      if (statusEl) statusEl.textContent = 'Gunakan widget chat Skrining Autisme AI untuk mendapatkan bantuan analisis Langflow.';
       return;
     }
 
@@ -1104,6 +1105,7 @@
   ---------------------------------------------------------- */
   var MILESTONES = {
     motorik: {
+      icon: '🏃',
       label: 'Motorik & Fisik',
       items: [
         { age: 6,  text: 'Tengkurap dan mengangkat kepala',     tip: 'Tummy time 3x sehari selama 5 menit' },
@@ -1117,6 +1119,7 @@
       ]
     },
     bahasa: {
+      icon: '💬',
       label: 'Bahasa & Komunikasi',
       items: [
         { age: 6,  text: 'Mengeluarkan suara ba-ba, ma-ma',     tip: 'Tirukan suara yang dibuat anak' },
@@ -1130,6 +1133,7 @@
       ]
     },
     sosial: {
+      icon: '🤝',
       label: 'Sosial & Emosi',
       items: [
         { age: 6,  text: 'Tersenyum saat melihat wajah dikenal', tip: 'Sering kontak mata dan senyum balik' },
@@ -1142,6 +1146,7 @@
       ]
     },
     kognitif: {
+      icon: '🧩',
       label: 'Kognitif & Belajar',
       items: [
         { age: 6,  text: 'Mencari mainan yang disembunyikan',    tip: 'Permainan cilukba dan benda tersembunyi' },
@@ -1205,7 +1210,7 @@
       doneCount += domainDone;
 
       var badgeColor = domainDone === items.length ? '#D1FAE5;color:#065F46'
-        : domainDone > 0 ? '#FEF3C7;color:#92400E' : '#F1F5F9;color:#64748B';
+        : domainDone > 0 ? '#D8F5E5;color:#047857' : '#E2E8F0;color:#475569';
 
       domainEl.innerHTML =
         '<button class="milestone-domain-head" data-domain="' + domainKey + '">' +
@@ -1331,9 +1336,9 @@
   var loginScreen = document.getElementById('loginScreen');
   var pageRole = document.body.getAttribute('data-page-role');
   var roleConfig = {
-    kader: { name: 'Posyandu', sub: 'Faskes Tingkat 1', avatar: 'KP', page: 'kader.html' },
-    ortu:  { name: 'Orang Tua', sub: 'Pemantauan Tumbuh Kembang', avatar: 'OT', page: 'orangtua.html' },
-    admin: { name: 'Administrator', sub: 'Manajemen Sistem', avatar: 'AD', page: 'admin.html' }
+    kader: { name: 'Posyandu', sub: 'Faskes Tingkat 1', avatar: 'KP', page: 'kader.html', username: 'kader', password: 'posyandu123', description: 'Masuk sebagai Posyandu untuk mengakses semua fitur skrining.' },
+    ortu:  { name: 'Orang Tua', sub: 'Pemantauan Tumbuh Kembang', avatar: 'OT', page: 'orangtua.html', username: 'ortu', password: 'ortu123', description: 'Masuk sebagai Orang Tua untuk memantau progres anak dan edukasi.' },
+    admin: { name: 'Administrator', sub: 'Manajemen Sistem', avatar: 'AD', page: 'admin.html', username: 'admin', password: 'admin123', description: 'Masuk sebagai Admin untuk manajemen sistem dan faskes.' }
   };
 
   function applyRoleAccess(role) {
@@ -1383,7 +1388,16 @@
       var config = roleConfig[selectedRole];
       if (!config) return;
 
+      if (userInp !== config.username || passInp !== config.password) {
+        if (errDiv) {
+          errDiv.textContent = 'Username atau password tidak sesuai dengan role yang dipilih.';
+          errDiv.classList.add('show');
+        }
+        return;
+      }
+
       if (errDiv) errDiv.classList.remove('show');
+      localStorage.setItem('sc_logged_role', selectedRole);
       window.location.href = config.page;
     });
   }
@@ -1395,32 +1409,113 @@
     });
   }
 
-  // Auto fill demo kredensial berdasarkan tab role
+  var loginEye = document.getElementById('loginEye');
+  if (loginEye) {
+    loginEye.addEventListener('click', function () {
+      var passField = document.getElementById('loginPass');
+      if (!passField) return;
+      var visible = passField.type === 'text';
+      passField.type = visible ? 'password' : 'text';
+      loginEye.textContent = visible ? 'Lihat' : 'Sembunyikan';
+      loginEye.setAttribute('aria-label', visible ? 'Tampilkan password' : 'Sembunyikan password');
+    });
+  }
+
+  function updateLoginRoleDescription(role) {
+    var descField = document.getElementById('loginRoleDesc');
+    var config = roleConfig[role];
+    if (!config) return;
+    if (descField) descField.textContent = config.description;
+  }
+
   document.querySelectorAll('.login-tab').forEach(function (tab) {
     tab.addEventListener('click', function () {
       document.querySelectorAll('.login-tab').forEach(function (t) { t.classList.remove('active'); });
       tab.classList.add('active');
-      var role = tab.getAttribute('data-role');
-      var userField = document.getElementById('loginUser');
-      var passField = document.getElementById('loginPass');
-      var descField = document.getElementById('loginRoleDesc');
-      var hintField = document.getElementById('demoHint');
-
-      if (role === 'kader') {
-        if (userField) userField.value = 'kader';
-        if (passField) passField.value = 'posyandu123';
-        if (descField) descField.textContent = 'Masuk sebagai Posyandu untuk mengakses semua fitur skrining.';
-        if (hintField) hintField.textContent = 'kader / posyandu123';
-      } else if (role === 'ortu') {
-        if (userField) userField.value = 'ortu';
-        if (passField) passField.value = 'ortu123';
-        if (descField) descField.textContent = 'Masuk sebagai Orang Tua untuk memantau progres anak & edukasi.';
-        if (hintField) hintField.textContent = 'ortu / ortu123';
-      } else if (role === 'admin') {
-        if (userField) userField.value = 'admin';
-        if (passField) passField.value = 'admin123';
-        if (descField) descField.textContent = 'Masuk sebagai Admin untuk manajemen sistem dan faskes.';
-        if (hintField) hintField.textContent = 'admin / admin123';
-      }
+      updateLoginRoleDescription(tab.getAttribute('data-role'));
     });
   });
+
+  function addUtilityPanel(id, title, bodyHtml) {
+    if (document.getElementById(id)) return;
+    var panel = document.createElement('section');
+    panel.id = id;
+    panel.className = 'view-panel';
+    panel.innerHTML = '<div class="page-header"><h2>' + title + '</h2><p>SmartChild AI</p></div><div class="card utility-panel-content">' + bodyHtml + '</div>';
+    var content = document.querySelector('.content-area');
+    if (content) content.appendChild(panel);
+  }
+
+  function setupAdminTools() {
+    var userSearch = document.getElementById('userSearch');
+    var userBody = document.getElementById('userTableBody');
+    if (userSearch && userBody) {
+      userSearch.addEventListener('input', function () {
+        var query = userSearch.value.toLowerCase();
+        userBody.querySelectorAll('tr').forEach(function (row) {
+          row.style.display = row.textContent.toLowerCase().indexOf(query) !== -1 ? '' : 'none';
+        });
+      });
+    }
+    var addUserBtn = document.getElementById('addUserBtn');
+    if (addUserBtn && userBody) addUserBtn.addEventListener('click', function () {
+      var name = prompt('Nama lengkap pengguna:');
+      var username = name && prompt('Username pengguna:');
+      if (!name || !username) return;
+      var row = document.createElement('tr');
+      row.innerHTML = '<td>' + (userBody.rows.length + 1) + '</td><td class="fw">' + name + '</td><td>' + username + '</td><td><span class="role-badge rb-ortu">Orang Tua</span></td><td>Belum diatur</td><td><span class="badge badge-low">Aktif</span></td><td><button class="tbl-btn tbl-btn-del" type="button">Hapus</button></td>';
+      userBody.appendChild(row);
+    });
+
+    var faskesPanel = document.getElementById('view-admin-faskes');
+    if (faskesPanel) {
+      var faskesSearch = faskesPanel.querySelector('.admin-search');
+      var faskesGrid = faskesPanel.querySelector('.faskes-grid');
+      if (faskesSearch && faskesGrid) faskesSearch.addEventListener('input', function () {
+        var query = faskesSearch.value.toLowerCase();
+        faskesGrid.querySelectorAll('.faskes-card').forEach(function (card) {
+          card.style.display = card.textContent.toLowerCase().indexOf(query) !== -1 ? '' : 'none';
+        });
+      });
+      var addFaskesBtn = faskesPanel.querySelector('.admin-toolbar .btn');
+      if (addFaskesBtn && faskesGrid) addFaskesBtn.addEventListener('click', function () {
+        var name = prompt('Nama fasilitas kesehatan:');
+        var address = name && prompt('Alamat fasilitas kesehatan:');
+        if (!name || !address) return;
+        var card = document.createElement('div');
+        card.className = 'faskes-card';
+        card.innerHTML = '<div class="faskes-icon">🏥</div><div class="faskes-info"><h4>' + name + '</h4><p>' + address + '</p><div class="faskes-meta"><span class="badge badge-low">Aktif</span><span class="muted small">0 anak terdaftar</span></div></div>';
+        faskesGrid.appendChild(card);
+      });
+    }
+  }
+
+  function setupUtilityPanels() {
+    var config = roleConfig[pageRole || localStorage.getItem('sc_logged_role') || 'kader'];
+    addUtilityPanel('view-profile', 'Profil Pengguna', '<div class="profile-summary"><strong>' + config.name + '</strong><span>' + config.sub + '</span><span>Username: ' + config.username + '</span></div><button class="btn btn-ghost-danger" id="profileLogoutDynamic" type="button">Keluar</button>');
+    addUtilityPanel('view-verification', 'Verifikasi', '<p>Daftar pengajuan yang membutuhkan verifikasi admin.</p><div class="verification-row"><strong>Posyandu Mawar</strong><span class="badge badge-mid">Menunggu verifikasi</span></div><div class="verification-row"><strong>Kader baru</strong><span class="badge badge-mid">Menunggu verifikasi</span></div>');
+    addUtilityPanel('view-export', 'Ekspor dan Backup Data', '<p>Unduh salinan data skrining dan riwayat aplikasi.</p><button class="btn btn-primary" id="exportDataBtn" type="button">Ekspor Data JSON</button><button class="btn btn-ghost" id="backupDataBtn" type="button">Backup ke Perangkat</button>');
+    var profileLogoutDynamic = document.getElementById('profileLogoutDynamic');
+    if (profileLogoutDynamic) profileLogoutDynamic.addEventListener('click', function () { window.location.href = 'index.html'; });
+    var exportDataBtn = document.getElementById('exportDataBtn');
+    if (exportDataBtn) exportDataBtn.addEventListener('click', function () {
+      var history = JSON.parse(localStorage.getItem('sc_history') || '[]');
+      var blob = new Blob([JSON.stringify(history, null, 2)], { type: 'application/json' });
+      var link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'smartchild-riwayat.json';
+      link.click();
+      URL.revokeObjectURL(link.href);
+    });
+    var backupDataBtn = document.getElementById('backupDataBtn');
+    if (backupDataBtn) backupDataBtn.addEventListener('click', function () { localStorage.setItem('sc_backup', localStorage.getItem('sc_history') || '[]'); backupDataBtn.textContent = 'Backup Tersimpan'; });
+    var langflowKeyInput = document.querySelector('#view-admin-settings input[type="password"]');
+    if (langflowKeyInput) {
+      langflowKeyInput.value = localStorage.getItem('sc_langflow_api_key') || '';
+      var saveConfig = langflowKeyInput.closest('.card').querySelector('.btn-primary');
+      if (saveConfig) saveConfig.addEventListener('click', function () { localStorage.setItem('sc_langflow_api_key', langflowKeyInput.value.trim()); saveConfig.textContent = 'Konfigurasi Tersimpan'; });
+    }
+    setupAdminTools();
+  }
+
+  setupUtilityPanels();
